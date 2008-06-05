@@ -24,18 +24,8 @@ import os
 from google.appengine.ext import webapp, db
 from google.appengine.api import users
 from google.appengine.ext.webapp import template
+from datadef import *
 
-class Photo(db.Model):
-  author = db.UserProperty()
-  title = db.StringProperty()
-  data = db.BlobProperty()
-  uploaded = db.DateTimeProperty()
-  
-class Profile(db.Model):
-  user = db.UserProperty()
-  neumont_mail = db.EmailProperty()
-  verify_value = db.StringProperty()
-  valid = db.BooleanProperty()
 
 class MainHandler(webapp.RequestHandler):
 
@@ -63,6 +53,9 @@ class Register(webapp.RequestHandler):
       self.response.out.write(template.render(path, template_values))
     else:
       self.redirect(users.create_login_url(self.request.uri))
+  def post(self):
+    self.response.out.write("POST") 
+
   
 def main():
   application = webapp.WSGIApplication([('/', MainHandler),
