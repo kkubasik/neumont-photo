@@ -8,7 +8,15 @@
 
     {% if user %}
         Welcome {{ user.nickname }}
-        <a href="{{ logout_url }}" > Logout </a>
+        <a href="{{ logout_url }}"> Logout </a>
+        {% if profile %}
+
+            <br />
+            
+        {% else %}
+            <b> we need to add a form here </b>
+        {% endif %}
+        <b> we should add buttons here...</b>
     {% endif %}
     <p>
     <b>You made it to the registration page...</b>
