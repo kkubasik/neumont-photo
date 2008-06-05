@@ -20,9 +20,22 @@
 
 import wsgiref.handlers
 
-
-from google.appengine.ext import webapp
+import os 
+from google.appengine.ext import webapp, db
 from google.appengine.api import users
+from google.appengine.ext.webapp import template
+
+class Photo(db.Model):
+  author = db.UserProperty()
+  title = db.StringProperty()
+  data = db.BlobProperty()
+  uploaded = db.DateTimeProperty()
+  
+class Profile(db.Model):
+  user = db.UserProperty()
+  neumont_mail = db.EmailProperty()
+  verify_value = db.StringProperty()
+  valid = db.BooleanProperty()
 
 class MainHandler(webapp.RequestHandler):
 
@@ -31,10 +44,25 @@ class MainHandler(webapp.RequestHandler):
     if user:
       self.response.out.write('Hello %s!' % user.nickname)
     else:
-      self.response.out.write('Hello loser')
+      self.redirect(users.create_login_url(self.request.uri))
 
+class Register(webapp.RequestHandler):
+  
+  def get(self):
+    profile = Profile.gql("WHERE user = :1",users.get_current_user())
+    template_values = {
+      'user': users.get_current_user(),
+      'logout_url': users.create_logout_url(self.request.uri),
+      'profile': profile,
+    }
+
+    path = os.path.join(os.path.dirname(__file__), 'templates/sample.django.html')
+    self.response.out.write(template.render(path, template_values))
+  
+  
 def main():
-  application = webapp.WSGIApplication([('/', MainHandler)],
+  application = webapp.WSGIApplication([('/', MainHandler),
+                                        ('/register', Register)],
                                        debug=True)
   wsgiref.handlers.CGIHandler().run(application)
 
