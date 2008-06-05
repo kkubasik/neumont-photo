@@ -49,16 +49,8 @@ class Register(webapp.RequestHandler):
         'profile': profile,
       }
 
-        path = os.path.join(os.path.dirname(__file__), 'templates/registration.html')
-        self.response.out.write(template.render(path, template_values))
-      else:
-        template_values = {
-          'user':users.get_current_user(),
-          'logout_url': users.create_logout_url(self.request.uri),
-        }
-        
-        path = os.path.join(os.path.dirname(__file__), 'templates/registration.html')
-        self.response.out.wrtie(template.render(path, template_values))
+      path = os.path.join(os.path.dirname(__file__), 'templates/registration.html')
+      self.response.out.write(template.render(path, template_values))
     else:
       self.redirect(users.create_login_url(self.request.uri))
 
