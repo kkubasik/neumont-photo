@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<!-- css -->
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.5.2/build/reset-fonts-grids/reset-fonts-grids.css">
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.5.2/build/base/base-min.css">
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.5.2/build/assets/skins/sam/skin.css">
+<link rel="stylesheet" type="text/css" href="/extend/photoViewer/build/photoviewer_base.css" >
+
+<!-- js -->
+<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/utilities/utilities.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/autocomplete/autocomplete-debug.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/container/container-debug.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/menu/menu-debug.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/button/button-debug.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/calendar/calendar-debug.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/datasource/datasource-beta-debug.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/json/json-debug.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/charts/charts-experimental-debug.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/slider/slider-debug.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/colorpicker/colorpicker-debug.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/cookie/cookie-beta-debug.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/datatable/datatable-beta-debug.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/editor/editor-beta-debug.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/history/history-debug.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/resize/resize-beta-debug.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/imagecropper/imagecropper-beta-debug.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/imageloader/imageloader-debug.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/selector/selector-beta-debug.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/layout/layout-beta-debug.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/tabview/tabview-debug.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/treeview/treeview-debug.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/uploader/uploader-experimental.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/logger/logger-debug.js"></script>
+<script type="text/javascript" src="/extend/photoViewer/build/photoviewer_base-min.js"></script>
+
+   <title>YUI Base Page</title>
+  <script type="text/javascript">
+// config viewers
+YAHOO.photoViewer.config = {
+	viewers: {
+		"v1" : {
+			properties: {
+				id: "v1",
+				grow: 0.2,
+				fade: 0.2,
+				modal: true,
+				dragable: false,
+				fixedcenter: true,
+				loadFrom: "xml",
+				url: "static/photos.xml",
+				position: "absolute",
+				easing: YAHOO.util.Easing.easeBothStrong
+			}
+		}
+	}
+};
+</script>
+
+
+</head>
+<body class="yui-skin-sam">
+<div id="doc4" class="yui-t2">
+   <div id="hd"><h1>YUI: CSS Grid Builder</h1></div>
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
+	
+
+<h1>Remote XML</h1>
+<a href="javascript:YAHOO.photoViewer.controller.getViewer('v1').loadXML();">Load XML</a><br />
+
+<div id="v1"></div>
+
+
+	</div>
+</div>
+	</div>
+	<div class="yui-b"><!-- YOUR NAVIGATION GOES HERE --></div>
+	
+	</div>
+   <div id="ft">Footer is here.</div>
+</div>
+</body>
+</html>
