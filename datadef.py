@@ -5,7 +5,7 @@ from google.appengine.ext.webapp import template
 
 
 
-class Photo(db.Model):
+class Photo(db.Model):  
   author = db.UserProperty()
   title = db.StringProperty()
   data = db.BlobProperty()

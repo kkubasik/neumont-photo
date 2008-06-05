@@ -26,11 +26,12 @@ from google.appengine.ext.admin import  logging
 
 
 class MainHandler(webapp.RequestHandler):
+  import sys
 
   def get(self):
     user = users.get_current_user()
     if user:
-      self.response.out.write('Hello %s!' % user.nickname )
+      self.response.out.write('Hello %s!' % user.nickname)
     else:
       self.redirect(users.create_login_url(self.request.uri))
 
@@ -41,7 +42,7 @@ class Register(webapp.RequestHandler):
     user = users.get_current_user()
     
     if user:
-      profile = Profile.gql("WHERE user = :1",users.get_current_user())
+      profile = Profile.gql("WHERE user = :1", users.get_current_user())
       template_values = {
         'user': users.get_current_user(),
         'logout_url': users.create_logout_url(self.request.uri),
@@ -73,9 +74,10 @@ class UploadFiles(webapp.RequestHandler):
       self.redirect(users.create_login_url(self.request.uri))
 
 
-
 class UploadData(webapp.RequestHandler):
+
   def post(self):
+    
     user = users.get_current_user()
     
     if user:
