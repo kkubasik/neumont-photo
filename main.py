@@ -42,7 +42,7 @@ class MainHandler(webapp.RequestHandler):
   def get(self):
     user = users.get_current_user()
     if user:
-      self.response.out.write('Hello %s!' % user.nickname)
+      self.response.out.write('Hello %s!' % user.nickname )
     else:
       self.redirect(users.create_login_url(self.request.uri))
 
@@ -50,15 +50,19 @@ class Register(webapp.RequestHandler):
   
   def get(self):
     profile = Profile.gql("WHERE user = :1",users.get_current_user())
-    template_values = {
-      'user': users.get_current_user(),
-      'logout_url': users.create_logout_url(self.request.uri),
-      'profile': profile,
-    }
+    user = users.get_current_user()
+    
+    if user:
+      template_values = {
+        'user': users.get_current_user(),
+        'logout_url': users.create_logout_url(self.request.uri),
+        'profile': profile,
+      }
 
-    path = os.path.join(os.path.dirname(__file__), 'templates/sample.django.html')
-    self.response.out.write(template.render(path, template_values))
-  
+      path = os.path.join(os.path.dirname(__file__), 'templates/registration.html')
+      self.response.out.write(template.render(path, template_values))
+    else:
+      self.redirect(users.create_login_url(self.request.uri))
   
 def main():
   application = webapp.WSGIApplication([('/', MainHandler),

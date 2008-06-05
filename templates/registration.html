@@ -1,0 +1,17 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<head>
+    <title>Registration Page</title>
+</head>
+<body>
+
+    {% if user %}
+        Welcome {{ user.nickname }}
+        <a href="{{ logout_url }}" > Logout </a>
+    {% endif %}
+    <p>
+    <b>You made it to the registration page...</b>
+    </p>
+</body>
+</html>
