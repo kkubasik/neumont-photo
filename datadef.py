@@ -5,15 +5,15 @@ from google.appengine.ext.webapp import template
 
 
 
-class Photo(db.Model):
-  author = db.UserProperty()
-  title = db.StringProperty()
-  data = db.BlobProperty()
-  uploaded = db.DateTimeProperty()
+class Photo(db.Model):  
+    author = db.UserProperty()
+    title = db.StringProperty()
+    data = db.BlobProperty()
+    uploaded = db.DateTimeProperty()
   
 class Profile(db.Model):
-  user = db.UserProperty()
-  neumont_mail = db.EmailProperty()
-  verify_value = db.StringProperty()
-  valid = db.BooleanProperty()
+    user = db.UserProperty()
+    neumont_mail = db.EmailProperty()
+    verify_value = db.StringProperty()
+    valid = db.BooleanProperty()
   
