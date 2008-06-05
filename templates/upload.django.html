@@ -48,117 +48,70 @@
 <input id="uploadBtn" name="upload" value="Upload Selected" onclick="upload()" type="button" />
 <br/>
 <div id="single" style="margin-top:2em;"></div>
-
 <script type="text/javascript">
 
 	this.myLogReader = new YAHOO.widget.LogReader();
 	
-	YAHOO.widget.Uploader.SWFURL = "http://yui.yahooapis.com/2.5.2/build/uploader/assets/uploader.swf"; 
-	
+	YAHOO.widget.Uploader.SWFURL = "http://localhost:8080/static/uploader.swf";
 	var uploader = new YAHOO.widget.Uploader( "toBeReplaced" );
 	uploader.addListener('fileSelect',onFileSelect);
-	uploader.addListener('uploadError',onUploadError);
-	uploader.addListener('uploadComplete',onUploadComplete);
-	uploader.addListener('uploadProgress',onUploadProgress);
 	uploader.addListener('uploadStart',onUploadStart);
-	var uploadCounter = 0;
-	var fileIdHash;
-	var dataArr;
+	uploader.addListener('uploadProgress',onUploadProgress);
+	uploader.addListener('uploadCancel',onUploadCancel);
+	uploader.addListener('uploadComplete',onUploadComplete);
+	uploader.addListener('uploadCompleteData',onUploadResponse);
+	uploader.addListener('uploadError', onUploadError);
 
+	var fileList;
+	
 	function browse() {
 		uploader.clearFileList();
-		uploader.browse(true, [{description:"Images", extensions:"*.jpg;*.png;*.gif"}]);
-	}
-	
-	function createDataTable(entries) {
-		rowCounter = 0;
-		fileIdHash = [];
-		dataArr = [];
-		for(var i in entries) {
-			var entry = entries[i];
-			dataObj = {};
-
-			for (var j in entry) {
-				dataObj[j] = entry[j];
-			}
-			dataArr.push(dataObj);
-			fileIdHash[dataObj["id"]] = rowCounter;
-			rowCounter++;
-		}
-		
-		this.allData = {data: dataArr}
-
-        var myColumnDefs = [
-            {key:"name", label: "File Name", sortable:false},
-			{key:"size", label: "Size", sortable:false},
-			{key:"progress", label: "Upload progress", sortable:false}
-        ];
-        this.myDataSource = new YAHOO.util.DataSource(this.allData);
-		this.myDataSource.dataType = YAHOO.util.DataSource.TYPE_JSARRAY;
-        this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
-        this.myDataSource.responseSchema = {
-            resultsList: "data",
-            fields: ["id","name","created","modified","type", "size", "progress"]
-        };
-		
-	    this.singleSelectDataTable = new YAHOO.widget.DataTable("single",
-	            myColumnDefs, this.myDataSource, {
-	                caption:"Files To Upload",
-	                selectionMode:"single"
-	            });
-	
+		uploader.browse(false, [{description:"Images", extensions:"*.png"}]);
+		YAHOO.log("Started browsing for images");
 	}
 	
 	function upload() {
-		YAHOO.log(dataArr);
-		var idToUpload = dataArr[uploadCounter]["id"];
-		uploader.upload(idToUpload, "/uploaddata", 'POST');
-		document.getElementById('uploadBtn').disabled = true;
+	if (fileList != null) {
+		for(var i in fileList) {
+			uploader.upload(i, 'http://localhost:8080/uploaddata');
+		}
+	}	
 	}
 	
-	function onUploadProgress(event) {
-		rowNum = fileIdHash[event["id"]];
-		prog = Math.round(100*(event["bytesLoaded"]/event["bytesTotal"]));
-		progbar = "<hr style=\"color: #f00; background-color: #f00; text-align:left; margin: 0 auto 0 0; height: 5px; width: " + prog + "px\"/>";
-		singleSelectDataTable.updateRow(rowNum, {name: dataArr[rowNum]["name"], size: dataArr[rowNum]["size"], progress: progbar});
-		
-	}
-	
-
 	function onFileSelect(event) {
 		fileList = event.fileList;
+		YAHOO.log("Files selected");
+		
 		YAHOO.log(event);
-		createDataTable(fileList);
-
 	}
 	
 	function onUploadStart(event) {
+		YAHOO.log(event.status);
+	}
+	
+	function onUploadProgress(event) {
 		YAHOO.log(event);
-		rowNum = fileIdHash[event["id"]];
-		singleSelectDataTable.updateRow(rowNum, {name: dataArr[rowNum]["name"], size: dataArr[rowNum]["size"], progress: "Starting..."});		
 	}
 	
 	function onUploadComplete(event) {
-		YAHOO.log(event);
-		rowNum = fileIdHash[event["id"]];
-		progbar = "<hr style=\"color: #f00; background-color: #f00; text-align:left; margin: 0 auto 0 0; height: 5px; width: 100px\"/>";
-		singleSelectDataTable.updateRow(rowNum, {name: dataArr[rowNum]["name"], size: dataArr[rowNum]["size"], progress: progbar});
-		
-		if (uploadCounter < dataArr.length - 1) {
-			uploadCounter++;
-			upload();
-		}
-		else {
-			YAHOO.log("All files uploaded!");
-			
-		}
+		YAHOO.log(event.status);
 	}
 	
-	function onUploadError (event) {
-		YAHOO.log(event);
+	function onUploadError(event) {
+		alert(event.status);
+		YAHOO.log(event.status, "error");
+	}
+	
+	function onUploadCancel(event) {
+		YAHOO.log(event.status);
+	}
+	
+	function onUploadResponse(event) {
+		YAHOO.log(event.statis);
 	}
 
 </script>
+
 	</div>
 </div>
 	</div>

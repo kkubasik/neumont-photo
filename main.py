@@ -95,10 +95,13 @@ class UploadData(webapp.RequestHandler):
             print self.request
             print user
             upfile = self.request.body()
-            logging.log(logging.INFO, self.request)
+            logging.log(logging.WARN, self.request)
+            self.response.out.write("Sucess")
             #path = os.path.join(os.path.dirname(__file__), 'templates/upload.django.html')
             #self.response.out.write(template.render(path, None))
         else:
+            logging.log(logging.ERROR,'not logged in!')
+            logging.log(logging.ERROR, self.request.get('Cookie'))
             self.redirect(users.create_login_url(self.request.uri))
 
 class ViewPhotos(webapp.RequestHandler):
