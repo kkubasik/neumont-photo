@@ -3,5 +3,6 @@
 <project id="92dcee73-7e87-4ed0-bd92-5745948c71c9" kpf_version="4" name="nuemontphoto.kpf">
 <preference-set idref="92dcee73-7e87-4ed0-bd92-5745948c71c9">
   <boolean id="import_live">1</boolean>
+  <string id="pythonExtraPaths">/usr/lib/python2.5:/usr/lib/python-django:/usr/lib/python-support:/usr/lib/python2.5/site-packages:/var/lib/python-support/python2.5:/home/kkubasik/gitsrc/google_appengine</string>
 </preference-set>
 </project>

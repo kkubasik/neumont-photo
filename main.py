@@ -22,13 +22,16 @@ import wsgiref.handlers
 
 
 from google.appengine.ext import webapp
-
+from google.appengine.api import users
 
 class MainHandler(webapp.RequestHandler):
 
   def get(self):
-    self.response.out.write('Hello world!')
-
+    user = users.get_current_user()
+    if user:
+      self.response.out.write('Hello %s!' % user.nickname)
+    else:
+      self.response.out.write('Hello loser')
 
 def main():
   application = webapp.WSGIApplication([('/', MainHandler)],
