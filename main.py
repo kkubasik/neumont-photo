@@ -26,78 +26,106 @@ from google.appengine.ext.admin import  logging
 
 
 class MainHandler(webapp.RequestHandler):
-  import sys
+    import sys
 
-  def get(self):
-    user = users.get_current_user()
-    if user:
-      self.response.out.write('Hello %s!' % user.nickname)
-    else:
-      self.redirect(users.create_login_url(self.request.uri))
+    def get(self):
+        '''
+      Get Main Index
+      '''
+        user = users.get_current_user()
+        if user:
+            self.response.out.write('Hello %s!' % user.nickname)
+            p = Profile.gql("WHERE user = :1", users.get_current_user())
+            if p.count() < 1:
+                newp = Profile()
+                newp.user = user
+                newp.valid = False
+                newp.put()
+        else:
+            self.redirect(users.create_login_url(self.request.uri))
 
 class Register(webapp.RequestHandler):
-  
-  def get(self):
-    
-    user = users.get_current_user()
-    
-    if user:
-      profile = Profile.gql("WHERE user = :1", users.get_current_user())
-      template_values = {
-        'user': users.get_current_user(),
-        'logout_url': users.create_logout_url(self.request.uri),
-        'profile': profile,
-      }
 
-      path = os.path.join(os.path.dirname(__file__), 'templates/registration.html')
-      self.response.out.write(template.render(path, template_values))
-    else:
-      self.redirect(users.create_login_url(self.request.uri))
+    def get(self):
 
-  def post(self):
-    self.response.out.write("POST") 
+        user = users.get_current_user()
+
+        if user:
+            profile = Profile.gql("WHERE user = :1", users.get_current_user())
+            template_values = {
+                'user': users.get_current_user(),
+                'logout_url': users.create_logout_url(self.request.uri),
+                'profile': profile,
+            }
+
+            path = os.path.join(os.path.dirname(__file__), 'templates/registration.html')
+            self.response.out.write(template.render(path, template_values))
+        else:
+            self.redirect(users.create_login_url(self.request.uri))
+
+    def post(self):
+        self.response.out.write("POST") 
 
 
 class UploadFiles(webapp.RequestHandler):
-  def get(self):
-    user = users.get_current_user()
-    
-    if user:
-       profile = Profile.gql("WHERE user = :1", users.get_current_user())
-       template_values = {
-        'user': users.get_current_user(),
-    'logout_url': users.create_logout_url(self.request.uri),
-    'profile': profile,
-      }
-       path = os.path.join(os.path.dirname(__file__), 'templates/upload.django.html')
-       self.response.out.write(template.render(path, None))
-    else:
-      self.redirect(users.create_login_url(self.request.uri))
+    def get(self):
+        user = users.get_current_user()
+
+        if user:
+            profile = Profile.gql("WHERE user = :1", users.get_current_user())
+            template_values = {
+                'user': users.get_current_user(),
+                'logout_url': users.create_logout_url(self.request.uri),
+                'profile': profile.fetch(1),
+            }
+            path = os.path.join(os.path.dirname(__file__), 'templates/upload.django.html')
+            self.response.out.write(template.render(path, None))
+        else:
+            self.redirect(users.create_login_url(self.request.uri))
 
 
 class UploadData(webapp.RequestHandler):
 
-  def post(self):
-    
-    user = users.get_current_user()
-    
-    if user:
-       upfile = self.request.body()
-       logging.log(logging.INFO, self.request)
-       path = os.path.join(os.path.dirname(__file__), 'templates/upload.django.html')
-       self.response.out.write(template.render(path, None))
-    else:
-      self.redirect(users.create_login_url(self.request.uri))
-  
-  
+    def post(self):
+        '''
+      Save the files submitted as a new photo, get metadata from throughout POST
+      '''
+        user = users.get_current_user()
+        if user:
+            print self.request
+            print user
+            upfile = self.request.body()
+            logging.log(logging.INFO, self.request)
+            #path = os.path.join(os.path.dirname(__file__), 'templates/upload.django.html')
+            #self.response.out.write(template.render(path, None))
+        else:
+            self.redirect(users.create_login_url(self.request.uri))
+
+class ViewPhotos(webapp.RequestHandler):
+    def get(self):
+        user = users.get_current_user()
+
+        if user:
+            profile = Profile.gql("WHERE user = :1", users.get_current_user())
+            template_values = {
+                'user': users.get_current_user(),
+                'logout_url': users.create_logout_url(self.request.uri),
+                'profile': profile.fetch(1),
+            }
+            path = os.path.join(os.path.dirname(__file__), 'templates/display.django.html')
+            self.response.out.write(template.render(path, None))
+        else:
+            self.redirect(users.create_login_url(self.request.uri))
+            
 def main():
-  application = webapp.WSGIApplication([('/', MainHandler),
-                                        ('/register', Register),
-                                        ('/upload', UploadFiles),
-                                        ('/uploaddata', UploadData)],
-                                       debug=True)
-  wsgiref.handlers.CGIHandler().run(application)
+    application = webapp.WSGIApplication([('/', MainHandler),
+                                          ('/register', Register),
+                                          ('/upload', UploadFiles),
+                                          ('/uploaddata', UploadData),
+                                          ('/view', ViewPhotos)],
+                                         debug=True)
+    wsgiref.handlers.CGIHandler().run(application)
 
 
 if __name__ == '__main__':
-  main()
+    main()

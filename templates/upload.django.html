@@ -108,7 +108,7 @@
 	function upload() {
 		YAHOO.log(dataArr);
 		var idToUpload = dataArr[uploadCounter]["id"];
-		uploader.upload(idToUpload, "/uploaddata");
+		uploader.upload(idToUpload, "/uploaddata", 'POST');
 		document.getElementById('uploadBtn').disabled = true;
 	}
 	
