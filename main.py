@@ -24,6 +24,8 @@ from google.appengine.ext.webapp import template
 from datadef import *
 from google.appengine.ext.admin import  logging
 import gzip
+import datetime
+from getimageinfo import getImageInfo
 
 class MainHandler(webapp.RequestHandler):
     import sys
@@ -94,20 +96,19 @@ class UploadData(webapp.RequestHandler):
         user = users.get_current_user()
         
         if user:
-            #print self.request.body
-            #print user
-           
-        
-           # upfile =  webapp.cgi.parse(fp=self.request.body_file)
-            #(self.request.body_file, self.request.headers['CONTENT_TYPE'])
-            #-------------------------------------- , pdict) (self.request.body)
-            logging.log(logging.WARN, self.request.POST.items())
-            p = Photo()
-            p.title = self.request.get('Filename')
-            p.author = user
-            p.data = gzip.zlib.compress(self.request.body)
-            #p.data = 
-            p.put()
+            c =0
+            while self.request.POST.get('defaults_%i'%c) is not None:
+                p = Photo()
+                try:
+                    
+                    p.title = self.request.POST.get('defaults_%i'%c).filename
+                   
+                    p.author = user
+                    p.data = gzip.zlib.compress(self.request.POST.get('defaults_%i'%c).file.read())
+                    p.put()
+                except:
+                    logging.log(logging.ERROR, "Bad File Upload")
+                c= c+1
             
             
             #path = os.path.join(os.path.dirname(__file__), 'templates/upload.django.html')
@@ -135,11 +136,16 @@ class ViewPhotos(webapp.RequestHandler):
             
             
 class PhotoSee(webapp.RequestHandler):
-    def get(self, id):
-        logging.log(logging.INFO, id)
-     
-        p = Photo.all().fetch(2)
-        self.response.out.write(gzip.zlib.decompress(p[0].data))
+    def get(self, key):
+        im = db.get(db.Key(key))
+        if not im:
+            self.error(404)
+            return
+        
+        content_type, width, height = getImageInfo(im.content)
+        self.response.headers.add_header("Expires", datetime.datetime.today())
+        self.response.headers["Content-Type"] = content_type
+        self.response.out.write(im.content)
         
 
 
@@ -149,7 +155,7 @@ def main():
                                           ('/upload', UploadFiles),
                                           ('/uploaddata', UploadData),
                                           ('/view', ViewPhotos),
-                                          ('/photo/(\d*)', PhotoSee)],
+                                          ('/photo/(.*)', PhotoSee)],
                                          debug=True)
     wsgiref.handlers.CGIHandler().run(application)
 
