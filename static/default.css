@@ -144,7 +144,27 @@ img.right {
 
 #userStatus
 { 
+	display: inline;
+	width: 300px;
+	text-align: right;
 	float: right;
+	margin-right: 0px;
+	padding-right: 0px;
+}
+
+
+#userStatus li
+{ 
+	display: block;
+	padding-top: 6px;
+	margin-right: 0px;
+	padding-right: 0px;
+}
+
+#userStatus a
+{ 
+	display: inline;
+	float: none;
 }
 
 
@@ -278,25 +298,25 @@ img.right {
 
 #s {
 	margin: 0;
-	padding: 2px 2px;
-	width: 120px;
-	height: 18px;
-	border: 1px solid #333333;
+	padding: 3px 3px;
+	width: 140px;
+	height: 16px;
+	border: 2px dotted #CCCCCC;
 	background: #000000;
-	font-size: 10px;
+	font-size: 12px;
 	color: #CCCCCC;
 }
 
 #x {
 	margin: 0;
-	padding: 2px 5px;
+	padding: 3px 5px;
 	height: 25px;
 	background: #666666;
 	border: 1px solid #333333;
 	text-decoration: none;
 	text-transform: uppercase;
 	font-family: Arial, Helvetica, sans-serif;
-	font-size: 10px;
+	font-size: 11px;
 	color: #CCCCCC;
 }
 
