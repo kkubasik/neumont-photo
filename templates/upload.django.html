@@ -1,130 +1,32 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-<!-- css -->
-<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.5.2/build/reset-fonts-grids/reset-fonts-grids.css">
-<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.5.2/build/base/base-min.css">
-<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.5.2/build/assets/skins/sam/skin.css">
-<!-- js -->
-<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/utilities/utilities.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/autocomplete/autocomplete-debug.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/container/container-debug.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/menu/menu-debug.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/button/button-debug.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/calendar/calendar-debug.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/datasource/datasource-beta-debug.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/json/json-debug.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/charts/charts-experimental-debug.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/slider/slider-debug.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/colorpicker/colorpicker-debug.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/cookie/cookie-beta-debug.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/datatable/datatable-beta-debug.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/editor/editor-beta-debug.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/history/history-debug.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/resize/resize-beta-debug.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/imagecropper/imagecropper-beta-debug.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/imageloader/imageloader-debug.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/selector/selector-beta-debug.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/layout/layout-beta-debug.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/tabview/tabview-debug.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/treeview/treeview-debug.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/uploader/uploader-experimental.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/logger/logger-debug.js"></script>
-   <title>YUI Base Page</title>
-  
+<title>Multiple file upload (Mootools version)</title>
 
+	<link rel="stylesheet" type="text/css" media="screen" href="/static/Stickman.MultiUpload.css" />
+
+	<script src="http://ajax.googleapis.com/ajax/libs/mootools/1.11/mootools-yui-compressed.js"></script>
+	<script src="/static/Stickman.MultiUpload.js"></script>
+	<script type="text/javascript">
+		window.addEvent('domready', function(){
+			// Use defaults: no limit, use default element name suffix, don't remove path from file name
+			new MultiUpload( $( 'main_form' ).defaults );
+			// Max 3 files, use '[{id}]' as element name suffix, remove path from file name, remove extra elemen
+		//	new MultiUpload( $( 'main_form' ).use_settings, 3, '[{id}]', true, true );
+		});
+	</script>
 </head>
-<body class="yui-skin-sam">
-<div id="doc4" class="yui-t2">
-   <div id="hd"><h1>YUI: CSS Grid Builder</h1></div>
-   <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
-	
-<h1>Uploader With DataTable Example</h1>
 
-<div id="toBeReplaced" style="width:400px;height:210px">Unable to load Flash content. You can download the latest version of Flash Player from the <a href="http://www.adobe.com/go/getflashplayer">Adobe Flash Player Download Center</a>.</p></div>
-<input id="browseBtn" name="browse" value="Browse for Images" onclick="browse()" type="button" />
-<input id="uploadBtn" name="upload" value="Upload Selected" onclick="upload()" type="button" />
-<br/>
-<div id="single" style="margin-top:2em;"></div>
-<script type="text/javascript">
-
-	this.myLogReader = new YAHOO.widget.LogReader();
-	
-	YAHOO.widget.Uploader.SWFURL = "http://localhost:8080/static/uploader.swf";
-	var uploader = new YAHOO.widget.Uploader( "toBeReplaced" );
-	uploader.addListener('fileSelect',onFileSelect);
-	uploader.addListener('uploadStart',onUploadStart);
-	uploader.addListener('uploadProgress',onUploadProgress);
-	uploader.addListener('uploadCancel',onUploadCancel);
-	uploader.addListener('uploadComplete',onUploadComplete);
-	uploader.addListener('uploadCompleteData',onUploadResponse);
-	uploader.addListener('uploadError', onUploadError);
-
-	var fileList;
-	
-	function browse() {
-		uploader.clearFileList();
-		uploader.browse(false, [{description:"Images", extensions:"*.png"}]);
-		YAHOO.log("Started browsing for images");
-	}
-	
-	function upload() {
-		uploader.uploadAll('http://localhost:8080/uploaddata', 'GET', {
-			user_email:'{{ user.email }}'
-			});
-			
-//	if (fileList != null) {
-//		for(var i in fileList) {
-//			uploader.upload(i, 'http://localhost:8080/uploaddata', 'POST', {
-//				user_email:'{{ user.email }}'
-//			});
-//		}
-//	}	
-	}
-	
-	function onFileSelect(event) {
-		fileList = event.fileList;
-		YAHOO.log("Files selected");
+<body>
+	<div>
+	<form id="main_form" method="POST" enctype="multipart/form-data" action="/uploaddata">
+		<!-- Uses defaults -->
+		Please Select Your Files:
+		<input type="file" name="defaults"><br clear="all"/><br/>
 		
-		YAHOO.log(event);
-	}
-	
-	function onUploadStart(event) {
-		YAHOO.log(event.status);
-	}
-	
-	function onUploadProgress(event) {
-		YAHOO.log(event);
-	}
-	
-	function onUploadComplete(event) {
-		YAHOO.log(event.status);
-	}
-	
-	function onUploadError(event) {
-		alert(event.status);
-		YAHOO.log(event.status, "error");
-	}
-	
-	function onUploadCancel(event) {
-		YAHOO.log(event.status);
-	}
-	
-	function onUploadResponse(event) {
-		YAHOO.log(event.statis);
-	}
-
-</script>
-
+		<!-- This is just na ordinary file upload -->
+		
+		<input type='submit' id='submit' name='submitbutton' />
+	</form>
 	</div>
-</div>
-	</div>
-	<div class="yui-b"><!-- YOUR NAVIGATION GOES HERE --></div>
-	
-	</div>
-   <div id="ft">Footer is here.</div>
-</div>
 </body>
 </html>

@@ -91,25 +91,22 @@ class UploadData(webapp.RequestHandler):
         '''
       Save the files submitted as a new photo, get metadata from throughout POST
       '''
-        #user = users.get_current_user()
-        email = self.request.get('user_email')
-        logging.log(logging.INFO,email)
-        user = users.User(email)
+        user = users.get_current_user()
         
         if user:
-            print self.request.body
-            print user
+            #print self.request.body
+            #print user
            
         
-            #upfile =  webapp.cgi.parse(fp=self.request.body_file)
+           # upfile =  webapp.cgi.parse(fp=self.request.body_file)
             #(self.request.body_file, self.request.headers['CONTENT_TYPE'])
             #-------------------------------------- , pdict) (self.request.body)
-            logging.log(logging.WARN, self.request.body)
+            logging.log(logging.WARN, self.request.POST.items())
             p = Photo()
             p.title = self.request.get('Filename')
             p.author = user
-            logging.log(logging.WARN, self.request.POST)
-            #p.data = gzip.zlib.compress()
+            p.data = gzip.zlib.compress(self.request.body)
+            #p.data = 
             p.put()
             
             
@@ -136,12 +133,23 @@ class ViewPhotos(webapp.RequestHandler):
         else:
             self.redirect(users.create_login_url(self.request.uri))
             
+            
+class PhotoSee(webapp.RequestHandler):
+    def get(self, id):
+        logging.log(logging.INFO, id)
+     
+        p = Photo.all().fetch(2)
+        self.response.out.write(gzip.zlib.decompress(p[0].data))
+        
+
+
 def main():
     application = webapp.WSGIApplication([('/', MainHandler),
                                           ('/register', Register),
                                           ('/upload', UploadFiles),
                                           ('/uploaddata', UploadData),
-                                          ('/view', ViewPhotos)],
+                                          ('/view', ViewPhotos),
+                                          ('/photo/(\d*)', PhotoSee)],
                                          debug=True)
     wsgiref.handlers.CGIHandler().run(application)
 
