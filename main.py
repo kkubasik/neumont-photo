@@ -142,10 +142,10 @@ class PhotoSee(webapp.RequestHandler):
             self.error(404)
             return
         
-        content_type, width, height = getImageInfo(im.content)
-        self.response.headers.add_header("Expires", datetime.datetime.today())
+        content_type, width, height = getImageInfo(gzip.zlib.decompress(im.data))
+        self.response.headers.add_header("Expires", "Thu, 01 Dec 2014 16:00:00 GMT")
         self.response.headers["Content-Type"] = content_type
-        self.response.out.write(im.content)
+        self.response.out.write(gzip.zlib.decompress(im.data))
         
 
 
