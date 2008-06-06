@@ -26,6 +26,7 @@ from google.appengine.ext.admin import  logging
 import gzip
 import datetime
 from getimageinfo import getImageInfo
+from google.appengine.api import memcache
 
 class MainHandler(webapp.RequestHandler):
     def get(self):
@@ -145,11 +146,17 @@ class PhotoSee(webapp.RequestHandler):
         if not im:
             self.error(404)
             return
+        cache = memcache.Client()
+        if cache.get(key) is None:
+            cache.set(key, gzip.zlib.decompress(im.data))
         
-        content_type, width, height = getImageInfo(gzip.zlib.decompress(im.data))
+        if cache.get(key+"type") is None:
+            content_type, width, height = getImageInfo(cache.get(key))
+            cache.set(key+"type",content_type)
+        
         self.response.headers.add_header("Expires", "Thu, 01 Dec 2014 16:00:00 GMT")
-        self.response.headers["Content-Type"] = content_type
-        self.response.out.write(gzip.zlib.decompress(im.data))
+        self.response.headers["Content-Type"] = cache.get(key+"type")
+        self.response.out.write(cache.get(key))
         
 
 
