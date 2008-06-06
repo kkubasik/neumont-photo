@@ -71,11 +71,17 @@
 	}
 	
 	function upload() {
-	if (fileList != null) {
-		for(var i in fileList) {
-			uploader.upload(i, 'http://localhost:8080/uploaddata');
-		}
-	}	
+		uploader.uploadAll('http://localhost:8080/uploaddata', 'GET', {
+			user_email:'{{ user.email }}'
+			});
+			
+//	if (fileList != null) {
+//		for(var i in fileList) {
+//			uploader.upload(i, 'http://localhost:8080/uploaddata', 'POST', {
+//				user_email:'{{ user.email }}'
+//			});
+//		}
+//	}	
 	}
 	
 	function onFileSelect(event) {

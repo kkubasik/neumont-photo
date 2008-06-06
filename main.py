@@ -23,7 +23,7 @@ from google.appengine.api import users
 from google.appengine.ext.webapp import template
 from datadef import *
 from google.appengine.ext.admin import  logging
-
+import gzip
 
 class MainHandler(webapp.RequestHandler):
     import sys
@@ -70,16 +70,17 @@ class Register(webapp.RequestHandler):
 class UploadFiles(webapp.RequestHandler):
     def get(self):
         user = users.get_current_user()
-
+        
         if user:
-            profile = Profile.gql("WHERE user = :1", users.get_current_user())
+            profile = Profile.gql("WHERE user = :1", user)
             template_values = {
-                'user': users.get_current_user(),
+                'user': user,
                 'logout_url': users.create_logout_url(self.request.uri),
                 'profile': profile.fetch(1),
+                'url': self.request.host_url,
             }
             path = os.path.join(os.path.dirname(__file__), 'templates/upload.django.html')
-            self.response.out.write(template.render(path, None))
+            self.response.out.write(template.render(path, template_values))
         else:
             self.redirect(users.create_login_url(self.request.uri))
 
@@ -90,13 +91,28 @@ class UploadData(webapp.RequestHandler):
         '''
       Save the files submitted as a new photo, get metadata from throughout POST
       '''
-        user = users.get_current_user()
+        #user = users.get_current_user()
+        email = self.request.get('user_email')
+        logging.log(logging.INFO,email)
+        user = users.User(email)
+        
         if user:
-            print self.request
+            print self.request.body
             print user
-            upfile = self.request.body()
-            logging.log(logging.WARN, self.request)
-            self.response.out.write("Sucess")
+           
+        
+            #upfile =  webapp.cgi.parse(fp=self.request.body_file)
+            #(self.request.body_file, self.request.headers['CONTENT_TYPE'])
+            #-------------------------------------- , pdict) (self.request.body)
+            logging.log(logging.WARN, self.request.body)
+            p = Photo()
+            p.title = self.request.get('Filename')
+            p.author = user
+            logging.log(logging.WARN, self.request.POST)
+            #p.data = gzip.zlib.compress()
+            p.put()
+            
+            
             #path = os.path.join(os.path.dirname(__file__), 'templates/upload.django.html')
             #self.response.out.write(template.render(path, None))
         else:

@@ -12,7 +12,7 @@ class Photo(db.Model):
     author = db.UserProperty()
     title = db.StringProperty()
     data = db.BlobProperty()
-    uploaded = db.DateTimeProperty()
+    uploaded = db.DateTimeProperty(auto_now=True)
     tags = db.StringListProperty('tags_list')
   
 class Profile(db.Model):
