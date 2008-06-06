@@ -24,4 +24,5 @@ class Profile(db.Model):
     verify_value = db.StringProperty()
     verify_sent = db.DateTimeProperty()
     valid = db.BooleanProperty()
-  
+
+
