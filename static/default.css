@@ -144,7 +144,27 @@ img.right {
 
 #userStatus
 { 
+	display: inline;
+	width: 300px;
+	text-align: right;
 	float: right;
+	margin-right: 0px;
+	padding-right: 0px;
+}
+
+
+#userStatus li
+{ 
+	display: block;
+	padding-top: 6px;
+	margin-right: 0px;
+	padding-right: 0px;
+}
+
+#userStatus a
+{ 
+	display: inline;
+	float: none;
 }
 
 
