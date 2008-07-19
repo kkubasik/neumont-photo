@@ -14,6 +14,7 @@ class Photo(db.Model):
     data = db.BlobProperty()
     uploaded = db.DateTimeProperty(auto_now=True)
     tags = db.StringListProperty('tags_list')
+    geotag = db.GeoPtProperty()
   
 class Profile(db.Model):
     '''
